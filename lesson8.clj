@@ -18,9 +18,12 @@
 (defn Example []
   (def string1 (slurp "Example.txt"))
   (println string1))
+
+;; ?
 (defn Example2 []
   (with-open [rdr (clojure.java.io/reader "Example.txt")]
     (reduce conj [] (line-seq rdr))))
+;;
 (defn Example3 []
   (with-open [w (clojure.java.io/writer "Example.txt" :append true)]
     (.write w (str "hello" "world"))))
@@ -78,6 +81,7 @@
 (defn hello-world12 []
   (println (clojure.string/replace "The tutorial is about Groovy" #"Groovy" "Clojure")))
 
+(= "HELLO WORLD" (.toUpperCase "hello world"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; trim ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

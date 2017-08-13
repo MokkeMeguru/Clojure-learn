@@ -1,0 +1,53 @@
+[elect@elect-emacs hello_seesaw]$ lein rum -m 
+'rum' is not a task. See 'lein help'.
+
+Did you mean this?
+         run
+[elect@elect-emacs hello_seesaw]$ lein run -m 
+Option -m requires a namespace argument.
+[elect@elect-emacs hello_seesaw]$ lein run -m hello-seesaw.core
+WARNING: boolean? already refers to: #'clojure.core/boolean? in namespace: seesaw.util, being replaced by: #'seesaw.util/boolean?
+  C-c C-c[elect@elect-emacs hello_seesaw]$ lein run -m hello-seesaw.core
+WARNING: boolean? already refers to: #'clojure.core/boolean? in namespace: seesaw.util, being replaced by: #'seesaw.util/boolean?
+Exception in thread "main" java.lang.IllegalArgumentException: class seesaw.core.proxy$javax.swing.JFrame$Tag$fd407141 does not support the :context option, compiling:(/tmp/form-init2986638101724486698.clj:1:73)
+	at clojure.lang.Compiler.load(Compiler.java:7469)
+	at clojure.lang.Compiler.loadFile(Compiler.java:7395)
+	at clojure.main$load_script.invokeStatic(main.clj:277)
+	at clojure.main$init_opt.invokeStatic(main.clj:279)
+	at clojure.main$init_opt.invoke(main.clj:279)
+	at clojure.main$initialize.invokeStatic(main.clj:310)
+	at clojure.main$null_opt.invokeStatic(main.clj:344)
+	at clojure.main$null_opt.invoke(main.clj:341)
+	at clojure.main$main.invokeStatic(main.clj:423)
+	at clojure.main$main.doInvoke(main.clj:386)
+	at clojure.lang.RestFn.applyTo(RestFn.java:137)
+	at clojure.lang.Var.applyTo(Var.java:702)
+	at clojure.main.main(main.java:37)
+Caused by: java.lang.IllegalArgumentException: class seesaw.core.proxy$javax.swing.JFrame$Tag$fd407141 does not support the :context option
+	at seesaw.util$illegal_argument.invokeStatic(util.clj:19)
+	at seesaw.util$illegal_argument.doInvoke(util.clj:16)
+	at clojure.lang.RestFn.invoke(RestFn.java:439)
+	at seesaw.options$lookup_option.invokeStatic(options.clj:122)
+	at seesaw.options$lookup_option.invoke(options.clj:117)
+	at seesaw.options$apply_options_STAR_.invokeStatic(options.clj:128)
+	at seesaw.options$apply_options_STAR_.invoke(options.clj:124)
+	at seesaw.options$apply_options.invokeStatic(options.clj:136)
+	at seesaw.options$apply_options.invoke(options.clj:132)
+	at seesaw.core$eval4505$fn__4508.invoke(core.clj:919)
+	at seesaw.config$eval312$fn__313$G__301__320.invoke(config.clj:16)
+	at seesaw.config$config_BANG_.invokeStatic(config.clj:68)
+	at seesaw.config$config_BANG_.doInvoke(config.clj:47)
+	at clojure.lang.RestFn.invoke(RestFn.java:439)
+	at hello_seesaw.core$_main.invokeStatic(core.clj:17)
+	at hello_seesaw.core$_main.doInvoke(core.clj:15)
+	at clojure.lang.RestFn.invoke(RestFn.java:397)
+	at clojure.lang.Var.invoke(Var.java:377)
+	at user$eval137.invokeStatic(form-init2986638101724486698.clj:1)
+	at user$eval137.invoke(form-init2986638101724486698.clj:1)
+	at clojure.lang.Compiler.eval(Compiler.java:7005)
+	at clojure.lang.Compiler.eval(Compiler.java:6995)
+	at clojure.lang.Compiler.load(Compiler.java:7457)
+	... 12 more
+  C-c C-c[elect@elect-emacs hello_seesaw]$ lein run -m hello-seesaw.core
+WARNING: boolean? already refers to: #'clojure.core/boolean? in namespace: seesaw.util, being replaced by: #'seesaw.util/boolean?
+  C-c C-c[elect@elect-emacs hello_seesaw]$ 

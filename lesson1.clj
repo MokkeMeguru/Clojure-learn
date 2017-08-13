@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hello World .cls             ;;;;;;;;;;
 (ns clojure.examples.hello
-  (:gen-class))
+ (:gen-class))
 (defn hello-world [username]
   (println (format "Hello, %s" username)))
 (hello-world "world")
@@ -43,7 +43,7 @@
 (ns clojure.examples.myio
   (:gen-class))
 ;; import 
-(require 'clojure.java.io)
+(use '[clojure.java.io :only (file)])
 ;; create clojure.java.io-instance as "as-file"
 (class (clojure.java.io/as-file "."))
 ;; defun sample function
