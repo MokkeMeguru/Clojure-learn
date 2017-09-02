@@ -1,0 +1,88 @@
+;; src/todo_clj/core.clj
+(ns todo-clj.core
+  (:require [ring.adapter.jetty :as server]))
+
+(defonce server (atom nil))
+
+;;(defn handler [req]
+;;  {:status 200
+;;   :headers {"Content-Type" "text/html"}
+;;   :body "<h1>Hello, world!!!<h1>"})
+
+(defn start-server []
+  (when-not @server
+    (reset! server
+            (server/run-jetty #'handler {:port 3000 :join? false}))))
+;; Var is a object which evaluate in call its function.
+
+(defn stop-server []
+  (when @server
+    (.stop @server)
+    (reset! server nil)))
+
+(defn restart-server []
+  (when @server
+    (stop-server)
+    (start-server)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def routes
+  {"/" home
+   "/todo" todo-index})
+
+(defn ok [body]
+  {:status 200
+   :body body})
+
+(defn html [res]
+  (assoc res :headers
+         {"Content-Type" "text/html; charset=utf-8"}))
+
+(defn not-found []
+  {:status 404
+   :body "<h1>404 page not found</h1>"})
+
+(defn home-view [req]
+  "<h1>Home</h1>
+  <a href=\"/todo\">TODO list</a>")
+
+(defn home [req]
+  (->
+   (home-view req)
+   ok
+   html))
+
+(def todo-list
+  [{:title "cook breakfast"}
+   {:title "trash waste"}
+   {:title "go home with having egg"}
+   {:title "wash bathroom"}])
+;; this is vector
+
+(defn todo-index-view [req]
+  `("<h1>TODO List</h1>"
+    "<ul>"
+    ~@(for [{:keys [title]} todo-list]
+        (str "<li>" title))
+    "</ul>"))
+;; this is cons list
+;; ~@ ... this is unquote-macro ... pre-evaluation
+;; `(+ ~@(range 10)) is (clojure.core/+ 0 1 2 3 4 5 6 7 8 9)
+;; (eval `(+ ~@(range 10))) is 45
+
+(defn todo-index [req]
+  (->
+   (todo-index-view req)
+   ok
+   html))
+
+(defn match-route [uri]
+  (get routes uri))
+
+(defn handler [req]
+  (let [uri (:uri req)
+        maybe-fn (match-route uriyy)]
+    (if maybe-fn
+      (maybe-fn req)
+      (not-found))))
