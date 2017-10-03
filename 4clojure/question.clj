@@ -1240,3 +1240,313 @@
           (sort-by clojure.string/lower-case))
     "Fools fall for foolish follies.")
    ["fall" "follies" "foolish" "Fools" "for"])
+
+;; 4Clojure Question 71
+;;
+;; The -> macro threads an expression x through a variable number of forms. First, x is inserted as the second item in the first form, making a list of it if it is not a list already.  Then the first form is inserted as the second item in the second form, making a list of that form if necessary.  This process continues for all the forms.  Using -> can sometimes make your code more readable.
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(= (last (sort (rest (reverse [2 5 4 1 3 6]))))
+   (-> [2 5 4 1 3 6] (reverse) (rest) (sort) (last))
+   5)
+
+;; 4Clojure Question 72
+;;
+;; The ->> macro threads an expression x through a variable number of forms. First, x is inserted as the last item in the first form, making a list of it if it is not a list already.  Then the first form is inserted as the last item in the second form, making a list of that form if necessary.  This process continues for all the forms.  Using ->> can sometimes make your code more readable.
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(= (reduce + (map inc (take 3 (drop 2 [2 5 4 1 3 6]))))
+   (->> [2 5 4 1 3 6] (drop 2) (take 3) (map inc) (reduce +))
+   11)
+
+;; 4Clojure Question 73
+;;
+;; A <a href="http://en.wikipedia.org/wiki/Tic-tac-toe">tic-tac-toe</a> board is represented by a two dimensional vector. X is represented by :x, O is represented by :o, and empty is represented by :e.  A player wins by placing three Xs or three Os in a horizontal, vertical, or diagonal row.  Write a function which analyzes a tic-tac-toe board and returns :x if X has won, :o if O has won, and nil if neither player has won.
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(= nil
+   ((fn tic-tac-toe [board]
+      (let [win?
+            (fn [sec]
+              (if (apply = sec) (first sec) nil))
+            row (map win? board)
+            col (map win? (apply map vector board))
+            diag1 (vector (win? (map get board (range 3))))
+            diag2 (vector (win? (map get board (reverse (range 3)))))]
+        (some #{:x :o} (concat row  col diag1 diag2))))
+    [[:e :e :e]
+     [:e :e :e]
+     [:e :e :e]]))
+
+(= :x
+   ((fn tic-tac-toe [board]
+      (let [win?
+            (fn [sec]
+              (if (apply = sec) (first sec) nil))
+            row (map win? board)
+            col (map win? (apply map vector board))
+            diag1 (vector (win? (map get board (range 3))))
+            diag2 (vector (win? (map get board (reverse (range 3)))))]
+        (some #{:x :o} (concat row  col diag1 diag2))))
+    [[:x :e :o]
+     [:x :e :e]
+     [:x :e :o]]))
+
+(= :o
+   ((fn tic-tac-toe [board]
+      (let [win?
+            (fn [sec]
+              (if (apply = sec) (first sec) nil))
+            row (map win? board)
+            col (map win? (apply map vector board))
+            diag1 (vector (win? (map get board (range 3))))
+            diag2 (vector (win? (map get board (reverse (range 3)))))]
+        (some #{:x :o} (concat row  col diag1 diag2))))
+    [[:e :x :e]
+     [:o :o :o]
+     [:x :e :x]]))
+
+(= nil
+   ((fn tic-tac-toe [board]
+      (let [win?
+            (fn [sec]
+              (if (apply = sec) (first sec) nil))
+            row (map win? board)
+            col (map win? (apply map vector board))
+            diag1 (vector (win? (map get board (range 3))))
+            diag2 (vector (win? (map get board (reverse (range 3)))))]
+        (some #{:x :o} (concat row  col diag1 diag2))))
+    [[:x :e :o]
+     [:x :x :e]
+     [:o :x :o]]))
+
+(= :x
+   ((fn tic-tac-toe [board]
+      (let [win?
+            (fn [sec]
+              (if (apply = sec) (first sec) nil))
+            row (map win? board)
+            col (map win? (apply map vector board))
+            diag1 (vector (win? (map get board (range 3))))
+            diag2 (vector (win? (map get board (reverse (range 3)))))]
+        (some #{:x :o} (concat row  col diag1 diag2))))
+    [[:x :e :e]
+     [:o :x :e]
+     [:o :e :x]]))
+
+(= :o
+   ((fn tic-tac-toe [board]
+      (let [win?
+            (fn [sec]
+              (if (apply = sec) (first sec) nil))
+            row (map win? board)
+            col (map win? (apply map vector board))
+            diag1 (vector (win? (map get board (range 3))))
+            diag2 (vector (win? (map get board (reverse (range 3)))))]
+        (some #{:x :o} (concat row  col diag1 diag2))))
+    [[:x :e :o]
+     [:x :o :e]
+     [:o :e :x]]))
+
+(= nil
+   ((fn tic-tac-toe [board]
+      (let [win?
+            (fn [sec]
+              (if (apply = sec) (first sec) nil))
+            row (map win? board)
+            col (map win? (apply map vector board))
+            diag1 (vector (win? (map get board (range 3))))
+            diag2 (vector (win? (map get board (reverse (range 3)))))]
+        (some #{:x :o} (concat row  col diag1 diag2))))
+    [[:x :o :x]
+     [:x :o :x]
+     [:o :x :o]]))
+
+;; 4Clojure Question 74
+;;
+;; Given a string of comma separated integers, write a function which returns a new comma separated string that only contains the numbers which are perfect squares.
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(=
+ ((fn [s]
+    (let [nums (map #(Integer/parseInt %) (clojure.string/split s #","))
+          sqrt- (fn [n]
+                  (let [sqrt (Math/sqrt n)]
+                    (= (Math/floor sqrt) sqrt)))
+          perfect-squares (filter sqrt- nums)]
+      (clojure.string/join "," perfect-squares)))
+  "4,5,6,7,8,9")
+ "4,9")
+
+(=
+ ((fn [s]
+    (let [nums (map #(Integer/parseInt %) (clojure.string/split s #","))
+          sqrt- (fn [n]
+                  (let [sqrt (Math/sqrt n)]
+                    (= (Math/floor sqrt) sqrt)))
+          perfect-squares (filter sqrt- nums)]
+      (clojure.string/join "," perfect-squares)))
+  "15,16,25,36,37")
+ "16,25,36")
+
+;; 4Clojure Question 75
+;;
+;; Two numbers are coprime if their greatest common divisor equals 1.  Euler's totient function f(x) is defined as the number of positive integers less than x which are coprime to x.  The special case f(1) equals 1.  Write a function which calculates Euler's totient function.
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(=
+ ((fn [n]
+    (if (= n 1) 1
+        (let [gcd
+              (fn [a b]
+                (if (zero? b) a (recur b (mod a b))))]
+          (count (filter #{1} (map (partial gcd n) (range 1 n)))))))
+  1)
+ 1)
+
+(= ((fn [n]
+      (if (= n 1) 1
+          (let [gcd
+                (fn [a b]
+                  (if (zero? b) a (recur b (mod a b))))]
+            (count (filter #{1} (map (partial gcd n) (range 1 n)))))))
+    10)
+   (count '(1 3 7 9))
+   4)
+
+(= ((fn [n]
+      (if (= n 1) 1
+          (let [gcd
+                (fn [a b]
+                  (if (zero? b) a (recur b (mod a b))))]
+            (count (filter #{1} (map (partial gcd n) (range 1 n)))))))
+    40)
+   16)
+
+(= ((fn [n]
+      (if (= n 1) 1
+          (let [gcd
+                (fn [a b]
+                  (if (zero? b) a (recur b (mod a b))))]
+            (count (filter #{1} (map (partial gcd n) (range 1 n)))))))
+    99)
+   60)
+
+;; 4Clojure Question 76
+;;
+;; The trampoline function takes a function f and a variable number of parameters.  Trampoline calls f with any parameters that were supplied.  If f returns a function, trampoline calls that function with no arguments.  This is repeated, until the return value is not a function, and then trampoline returns that non-function value.  This is useful for implementing mutually recursive algorithms in a way that won't consume the stack.
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(= [1 3 5 7 9 11]
+   (letfn
+       [(foo [x y] #(bar (conj x y) y))
+        (bar [x y] (if (> (last x) 10)
+                     x
+                     #(foo x (+ 2 y))))]
+     (trampoline foo [] 1)))
+
+;; 4Clojure Question 77
+;;
+;; Write a function which finds all the anagrams in a vector of words.  A word x is an anagram of word y if all the letters in x can be rearranged in a different order to form y.  Your function should return a set of sets, where each sub-set is a group of words which are anagrams of each other.  Each sub-set should have at least two words.  Words without any anagrams should not be included in the result.
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(=
+ ((fn [vec]
+    (set (map #(-> % val set)
+              (remove #(-> % val count #{1})
+                      (group-by frequencies vec)))))
+  ["meat" "mat" "team" "mate" "eat"])
+ #{#{"meat" "team" "mate"}})
+
+(=
+ ((fn [vec]
+    (set (map #(-> % val set)
+              (remove #(-> % val count #{1})
+                      (group-by frequencies vec)))))
+  ["veer" "lake" "item" "kale" "mite" "ever"])
+ #{#{"veer" "ever"} #{"lake" "kale"} #{"mite" "item"}})
+
+;; 4Clojure Question 78
+;;
+;; Reimplement the function described in <a href="76"> "Intro to Trampoline"</a>.
+;;
+;; Restrictions (please don't use these function(s)): trampoline
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(= (letfn [(triple [x] #(sub-two (* 3 x)))
+           (sub-two [x] #(stop?(- x 2)))
+           (stop? [x] (if (> x 50) x #(triple x)))]
+     ((fn [f & args]
+        (loop [val (apply f args)]
+          (if (fn? val) (recur (val)) val)))
+      triple 2))
+   82)
+
+(= (letfn [(my-even? [x] (if (zero? x) true #(my-odd? (dec x))))
+           (my-odd? [x] (if (zero? x) false #(my-even? (dec x))))]
+     (map
+      (partial (fn [f & args]
+                 (loop [val (apply f args)]
+                   (if (fn? val) (recur (val)) val))) my-even?)
+      (range 6)))
+   [true false true false true false])
+
+;; 4Clojure Question 79
+;;
+;; Write a function which calculates the sum of the minimal path through a triangle.  The triangle is represented as a collection of vectors.  The path should start at the top of the triangle and move to an adjacent number on the next row until the bottom of the triangle is reached.
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(= 7
+   ((fn collapse [p]
+      (letfn [(combine [low up]
+                (map + up
+                     (map #(apply min %) (partition 2 1 low))))]
+        (first (reduce combine (reverse p)))))
+    '([1]
+      [2 4]
+      [5 1 4]
+      [2 3 4 5]))) ; 1->2->1->3
+
+(= 20
+   ((fn collapse [p]
+      (letfn [(combine [low up]
+                (map + up
+                     (map #(apply min %) (partition 2 1 low))))]
+        (first (reduce combine (reverse p)))))
+    '([3]
+      [2 4]
+      [1 9 3]
+      [9 9 2 4]
+      [4 6 6 7 8]
+      [5 7 3 5 1 4]))) ; 3->4->3->2->7->1
+
+;; 4Clojure Question 80
+;;
+;; A number is "perfect" if the sum of its divisors equal the number itself.  6 is a perfect number because 1+2+3=6.  Write a function which returns true for perfect numbers and false otherwise.
+;;
+;; Use M-x 4clojure-check-answers when you're done!
+
+(= ((fn [n]
+      (= n (reduce + (filter #(zero? (mod n %)) (range 1 n))))) 6) true)
+
+(= ((fn [n]
+      (= n (reduce + (filter #(zero? (mod n %)) (range 1 n))))) 7) false)
+
+(= ((fn [n]
+      (= n (reduce + (filter #(zero? (mod n %)) (range 1 n))))) 496) true)
+
+(= ((fn [n]
+      (= n (reduce + (filter #(zero? (mod n %)) (range 1 n))))) 500) false)
+
+(= ((fn [n]
+      (= n (reduce + (filter #(zero? (mod n %)) (range 1 n))))) 8128) true)
+
